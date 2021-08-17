@@ -45,29 +45,58 @@ class NutsFinder:
 
 
 class LauFinder:
-    def __init__(self, country_code):
+
+
+    def __init__(self, country_code, hierarchical_search=True):
 
         self._lau = load_lau_table(country_code=country_code)
+        self._hierarchical = hierarchical_search
+        self._country_code = country_code
 
-        print("Loading fine and coarse NUTS data for hierarchical search.")
+        if self._hierarchical:
+            self._load_additional_data()
+
+
+    def _load_additional_data(self):
+
+        print("Loading additional NUTS data for hierarchical search.")
 
         self._nuts_fine = load_nuts_table(
-            country_code=country_code, spatial_resolution=1, level=3
+            country_code=self._country_code, spatial_resolution=1, level=3
         )
+
         self._nuts_coarse = load_nuts_table(
-            country_code=country_code, spatial_resolution=60, level=3
+            country_code=self._country_code, spatial_resolution=60, level=3
         )
 
-        correspondences = load_correspondence_table(country_code=country_code)
-        correspondences = correspondences[["NUTS 3 CODE", "LAU CODE"]]
-        correspondences.rename(
-            columns={"LAU CODE": "LAU_ID", "NUTS 3 CODE": "NUTS3_CODE"},
-            inplace=True
-        )
+        renaming = {"LAU CODE": "LAU_ID", "NUTS 3 CODE": "NUTS3_CODE"}
+        corr = load_correspondence_table(country_code=self._country_code)
+        corr = corr[["NUTS 3 CODE", "LAU CODE"]]
+        corr.rename(columns=renaming,inplace=True)
 
-        self._lau = self._lau.merge(correspondences, on="LAU_ID")
+        self._lau = self._lau.merge(corr, on="LAU_ID")
+
 
     def find(self, lat, lon):
+
+        if self._hierarchical:
+            return self._find_hierarchical(lat=lat, lon=lon)
+        else:
+            return self._find_direct(lat=lat, lon=lon)
+
+
+    def _find_direct(self, lat, lon):
+
+        point = Point(lon, lat)
+        region = _find(point, self._lau)
+
+        if region is None:
+            print(f"No LAU id found for lat={lat}, lon={lon}")
+
+        return region
+
+
+    def _find_hierarchical(self, lat, lon):
 
         # Create a point object
         point = Point(lon, lat)
