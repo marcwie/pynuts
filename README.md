@@ -4,7 +4,7 @@ Easy access to NUTS and LAU codes for a given location.
 
 The package provides a quick way to find NUTS and LAU codes (and some additional information) for a given point (latitude, longitude) on the surface. The package automatically downloads the necessary input tables and shapefiles from Eurostat's servers. 
 
-The package uses NUTS codes from 2021 and LAU codes from 2020 which is currently the most recent data. Future versions will enable users to select specific years for which updates to NUTS and LAU are available.
+The package uses NUTS codes from 2016 and LAU codes from 2019 which is currently the most recent data. Future versions will enable users to select specific years for which updates to NUTS and LAU are available.
 
 **Note:** This package has been developed and tested using Linux. Your mileage on Windows and MacOS may vary.
 
