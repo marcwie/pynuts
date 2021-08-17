@@ -4,12 +4,6 @@
 
 from setuptools import setup, find_packages
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
-
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
-
 requirements = ["pandas", "geopandas", "wget", "openpyxl"]
 
 test_requirements = []
@@ -31,7 +25,6 @@ setup(
     description="Easy access to NUTS and LAU codes for a given location",
     install_requires=requirements,
     license="MIT license",
-    long_description=readme + '\n\n' + history,
     include_package_data=True,
     keywords='pynuts',
     name='pynuts',
