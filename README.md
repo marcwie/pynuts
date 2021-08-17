@@ -11,7 +11,13 @@ The package uses NUTS codes from 2016 and LAU codes from 2019 which is currently
 # Usage
 
 ## Installation
-Clone this repository and do `python setup.py install`.
+To install the package just type:
+```python
+git clone git@github.com:marcwie/pynuts.git
+cd pynuts
+python setup.py install
+```
+Installation via `pip` will be available soon.
 
 ## Load data
 If you only wish to obtain the official LAU and NUTS tables you can achieve this like so:
@@ -60,7 +66,7 @@ Point lies in NUTS3-Region Rieti with ID ITI42
 If you run these commands for the first time, the package first needs to download the necessary shapefiles. This can take a while but only needs to be done once.
 
 ## Find LAU-region corresponding to a specific location
-You can do the same now for LAU-regions which is a very fine grained tessalation of countries. Just type
+You can do the same now for LAU-regions which are a very fine grained tessalation of countries into _local administrative units_. To find the LAU corresponding to a specific location just type
 ```python
 from pynuts import LauFinder
 
