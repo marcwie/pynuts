@@ -43,7 +43,7 @@ def load_lau_table(country_code):
    
     # Load data into pandas dataframe and filter for specified country
     df = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
-    df = df[lau["CNTR_CODE"] == country_code]
+    df = df[df["CNTR_CODE"] == country_code]
 
     return df
 
