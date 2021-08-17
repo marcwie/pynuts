@@ -14,7 +14,8 @@ Path(DATA_DIRECTORY).mkdir(parents=True, exist_ok=True)
 SERVER = "https://gisco-services.ec.europa.eu/distribution/v2/"
 
 # Path to the correspondence table on the server
-CORRESPONDENCE_TABLE = "https://ec.europa.eu/eurostat/documents/345175/501971/EU-27-LAU-2020-NUTS-2021-NUTS-2016.xlsx"
+CORRESPONDENCE_TABLE = "https://ec.europa.eu/eurostat/documents/345175/"\
+        "501971/EU-27-LAU-2020-NUTS-2021-NUTS-2016.xlsx"
 
 
 def load_lau_table(country_code):
@@ -47,10 +48,10 @@ def load_lau_table(country_code):
             zip_ref.extractall(DATA_DIRECTORY + file_name[:-4])
 
     # Load data into pandas dataframe and filter for specified country
-    df = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
-    df = df[df["CNTR_CODE"] == country_code]
+    data = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
+    data = data[data["CNTR_CODE"] == country_code]
 
-    return df
+    return data
 
 
 def load_nuts_table(country_code, spatial_resolution, level):
@@ -83,11 +84,11 @@ def load_nuts_table(country_code, spatial_resolution, level):
 
     if spatial_resolution not in [1, 3, 10, 20, 60]:
         print("spatial_resolution must be either 1, 3, 10, 20 or 60.")
-        return
+        return None
 
     if level not in [1, 2, 3]:
         print("level must be either 1, 2 or 3.")
-        return
+        return None
 
     spatial_resolution = str(spatial_resolution).zfill(2)
 
@@ -106,10 +107,10 @@ def load_nuts_table(country_code, spatial_resolution, level):
             zip_ref.extractall(DATA_DIRECTORY + file_name[:-4])
 
     # Load data into pandas dataframe and filter for specified country
-    df = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
-    df = df[df["CNTR_CODE"] == country_code]
+    data = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
+    data = data[data["CNTR_CODE"] == country_code]
 
-    return df
+    return data
 
 
 def load_correspondence_table(country_code):
@@ -127,14 +128,14 @@ def load_correspondence_table(country_code):
     stores it there for later use.
     """
     print(f"Loading correspondence table for {country_code}")
-    file_name = CORRESPONDENCE_TABLE.split("/")[-1]
+    file_name = CORRESPONDENCE_TABLE.rsplit("/", maxsplit=1)[-1]
 
     # Download the data
     if not os.path.exists(DATA_DIRECTORY + file_name):
         wget.download(CORRESPONDENCE_TABLE, DATA_DIRECTORY + file_name)
 
-    df = pd.read_excel(
+    data = pd.read_excel(
         DATA_DIRECTORY + file_name, sheet_name=country_code, dtype="object"
     )
 
-    return df
+    return data

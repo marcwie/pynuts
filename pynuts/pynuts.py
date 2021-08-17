@@ -1,5 +1,5 @@
-from .dataio import load_nuts_table, load_lau_table, load_correspondence_table
 from shapely.geometry import Point
+from .dataio import load_nuts_table, load_lau_table, load_correspondence_table
 
 
 def _find(shapely_point, regions_dataframe):
@@ -16,12 +16,12 @@ def _find(shapely_point, regions_dataframe):
         no region is found.
     """
 
-    for i, region in regions_dataframe.iterrows():
+    for _, region in regions_dataframe.iterrows():
         geometry = region.geometry
         if geometry.contains(shapely_point):
             return region
-    else:
-        return None
+
+    return None
 
 
 class NutsFinder:
@@ -61,7 +61,8 @@ class LauFinder:
         correspondences = load_correspondence_table(country_code=country_code)
         correspondences = correspondences[["NUTS 3 CODE", "LAU CODE"]]
         correspondences.rename(
-            columns={"LAU CODE": "LAU_ID", "NUTS 3 CODE": "NUTS3_CODE"}, inplace=True
+            columns={"LAU CODE": "LAU_ID", "NUTS 3 CODE": "NUTS3_CODE"},
+            inplace=True
         )
 
         self._lau = self._lau.merge(correspondences, on="LAU_ID")
@@ -79,7 +80,7 @@ class LauFinder:
 
         # If the point is still not in any nuts region we stop here
         if nuts_region is None:
-            return
+            return None
 
         # Otherwise we try to find the lau region of the point within the
         # detected nuts region
@@ -97,7 +98,7 @@ class LauFinder:
 
         # Again, if the point is not in any nuts region we stop here for good
         if nuts_region is None:
-            return
+            return None
 
         nuts_id = nuts_region.NUTS_ID
         lau_region_candidates = self._lau[self._lau.NUTS3_CODE == nuts_id]

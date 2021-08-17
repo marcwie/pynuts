@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ["pandas", "geopandas", "wget", "openpyxl"]
 
-test_requirements = [ ]
+test_requirements = []
 
 setup(
     author="Marc Wiedermann",
