@@ -30,7 +30,7 @@ def load_lau_table(country_code):
     Loads the data from the Eurostat server into pynuts' config folder and
     stores it there for later use.
     """
-    print("Loading LAU data from 2020") 
+    print(f"Loading LAU data from 2020 for {country_code}") 
     
     # TODO: Let users choose year and version in the future
     path = "lau/download/"
@@ -76,7 +76,8 @@ def load_nuts_table(country_code, spatial_resolution, level):
     - NUTS 2: basic regions for the application of regional policies
     - NUTS 3: small regions for specific diagnoses
     """
-    print("Loading NUTS data from 2021") 
+    print(f"Loading LEVEL{level} NUTS data from 2021 for {country_code} at " \
+          f"{spatial_resolution}m spatial resolution") 
     
     if spatial_resolution not in [1, 3, 10, 20, 60]:
         print("spatial_resolution must be either 1, 3, 10, 20 or 60.")
@@ -123,6 +124,7 @@ def load_correspondence_table(country_code):
     Loads the data from the Eurostat server into pynuts' config folder and
     stores it there for later use.
     """
+    print(f"Loading correspondence table for {country_code}")
     file_name = CORRESPONDENCE_TABLE.split("/")[-1]
 
     # Download the data
