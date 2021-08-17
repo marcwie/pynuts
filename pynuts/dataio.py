@@ -8,7 +8,7 @@ import pandas as pd
 # Create data directory in user home
 HOME = os.path.expanduser("~")
 DATA_DIRECTORY = HOME + "/.pynuts/"
-Path(DATA_DIRECTORY).mkdir(parents=True, exist_ok=True) 
+Path(DATA_DIRECTORY).mkdir(parents=True, exist_ok=True)
 
 # Path to the server that holds the LAU and NUTS shapefiles
 SERVER = "https://gisco-services.ec.europa.eu/distribution/v2/"
@@ -30,24 +30,24 @@ def load_lau_table(country_code):
     Loads the data from the Eurostat server into pynuts' config folder and
     stores it there for later use.
     """
-    print(f"Loading LAU data from 2020 for {country_code}") 
-    
+    print(f"Loading LAU data from 2020 for {country_code}")
+
     # TODO: Let users choose year and version in the future
     path = "lau/download/"
     file_name = "ref-lau-2020-01m.shp.zip"
     shapefile = "LAU_RG_01M_2020_4326.shp.zip"
 
     # Download the data
-    if not os.path.exists(DATA_DIRECTORY+file_name):                              
-        wget.download(SERVER+path+file_name, DATA_DIRECTORY+file_name)
-  
+    if not os.path.exists(DATA_DIRECTORY + file_name):
+        wget.download(SERVER + path + file_name, DATA_DIRECTORY + file_name)
+
     # Unzip the data
-    if not os.path.exists(DATA_DIRECTORY+file_name[:-4]):
-        with zipfile.ZipFile(DATA_DIRECTORY+file_name, 'r') as zip_ref:
-            zip_ref.extractall(DATA_DIRECTORY+file_name[:-4])
-   
+    if not os.path.exists(DATA_DIRECTORY + file_name[:-4]):
+        with zipfile.ZipFile(DATA_DIRECTORY + file_name, "r") as zip_ref:
+            zip_ref.extractall(DATA_DIRECTORY + file_name[:-4])
+
     # Load data into pandas dataframe and filter for specified country
-    df = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
+    df = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
     df = df[df["CNTR_CODE"] == country_code]
 
     return df
@@ -76,9 +76,11 @@ def load_nuts_table(country_code, spatial_resolution, level):
     - NUTS 2: basic regions for the application of regional policies
     - NUTS 3: small regions for specific diagnoses
     """
-    print(f"Loading LEVEL{level} NUTS data from 2021 for {country_code} at " \
-          f"{spatial_resolution}m spatial resolution") 
-    
+    print(
+        f"Loading LEVEL{level} NUTS data from 2021 for {country_code} at "
+        f"{spatial_resolution}m spatial resolution"
+    )
+
     if spatial_resolution not in [1, 3, 10, 20, 60]:
         print("spatial_resolution must be either 1, 3, 10, 20 or 60.")
         return
@@ -95,16 +97,16 @@ def load_nuts_table(country_code, spatial_resolution, level):
     shapefile = f"NUTS_RG_{spatial_resolution}M_2021_4326_LEVL_{level}.shp.zip"
 
     # Download the data
-    if not os.path.exists(DATA_DIRECTORY+file_name):                              
-        wget.download(SERVER+path+file_name, DATA_DIRECTORY+file_name)
-  
+    if not os.path.exists(DATA_DIRECTORY + file_name):
+        wget.download(SERVER + path + file_name, DATA_DIRECTORY + file_name)
+
     # Unzip the data
-    if not os.path.exists(DATA_DIRECTORY+file_name[:-4]):
-        with zipfile.ZipFile(DATA_DIRECTORY+file_name, 'r') as zip_ref:
-            zip_ref.extractall(DATA_DIRECTORY+file_name[:-4])
-   
+    if not os.path.exists(DATA_DIRECTORY + file_name[:-4]):
+        with zipfile.ZipFile(DATA_DIRECTORY + file_name, "r") as zip_ref:
+            zip_ref.extractall(DATA_DIRECTORY + file_name[:-4])
+
     # Load data into pandas dataframe and filter for specified country
-    df = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
+    df = geopandas.read_file(DATA_DIRECTORY + file_name[:-4] + "/" + shapefile)
     df = df[df["CNTR_CODE"] == country_code]
 
     return df
@@ -128,10 +130,11 @@ def load_correspondence_table(country_code):
     file_name = CORRESPONDENCE_TABLE.split("/")[-1]
 
     # Download the data
-    if not os.path.exists(DATA_DIRECTORY+file_name):                              
-        wget.download(CORRESPONDENCE_TABLE, DATA_DIRECTORY+file_name)
-  
-    df = pd.read_excel(DATA_DIRECTORY+file_name, sheet_name=country_code, 
-                       dtype="object")
+    if not os.path.exists(DATA_DIRECTORY + file_name):
+        wget.download(CORRESPONDENCE_TABLE, DATA_DIRECTORY + file_name)
+
+    df = pd.read_excel(
+        DATA_DIRECTORY + file_name, sheet_name=country_code, dtype="object"
+    )
 
     return df
