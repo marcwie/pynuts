@@ -19,6 +19,9 @@ python setup.py install
 ```
 Installation via `pip` will be available soon.
 
+## Getting started
+In order to get started you should look at the jupyter notebooks in the `examples`-folder. 
+
 ## Load data
 If you only wish to obtain the official LAU and NUTS tables you can achieve this like so:
 ```python
