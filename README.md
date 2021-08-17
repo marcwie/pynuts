@@ -11,7 +11,13 @@ The package uses NUTS codes from 2016 and LAU codes from 2019 which is currently
 # Usage
 
 ## Installation
-Clone this repository and do `python setup.py install`.
+To install the package just type:
+```python
+git clone git@github.com:marcwie/pynuts.git
+cd pynuts
+python setup.py install
+```
+Installation via `pip` will be available soon.
 
 ## Load data
 If you only wish to obtain the official LAU and NUTS tables you can achieve this like so:
