@@ -60,7 +60,7 @@ Point lies in NUTS3-Region Rieti with ID ITI42
 If you run these commands for the first time, the package first needs to download the necessary shapefiles. This can take a while but only needs to be done once.
 
 ## Find LAU-region corresponding to a specific location
-You can do the same now for LAU-regions which is a very fine grained tessalation of countries. Just type
+You can do the same now for LAU-regions which are a very fine grained tessalation of countries into _local administrative units_. To find the LAU corresponding to a specific location just type
 ```python
 from pynuts import LauFinder
 
