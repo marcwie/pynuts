@@ -42,10 +42,10 @@ def load_lau_table(country_code):
             zip_ref.extractall(DATA_DIRECTORY+file_name[:-4])
    
     # Load data into pandas dataframe and filter for specified country
-    lau = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
-    lau = lau[lau["CNTR_CODE"] == country_code]
+    df = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
+    df = df[lau["CNTR_CODE"] == country_code]
 
-    return lau
+    return df
 
 
 def load_nuts_table(country_code, spatial_resolution, level):
