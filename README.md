@@ -34,7 +34,7 @@ print("Point lies in NUTS1-Region", region.NUTS_NAME, "with ID", region.NUTS_ID)
 ```
 which prints
 ```
-Loading LEVEL1 NUTS data from 2021 for IT at 60m spatial resolution
+Loading LEVEL1 NUTS data from 2016 for IT at 60m spatial resolution
 Point lies in NUTS1-Region Centro (IT) with ID ITI
 ```
 Similarly, you could do the same for NUTS2- and NUTS3-regions:
@@ -51,14 +51,37 @@ print("Point lies in NUTS3-Region", region.NUTS_NAME, "with ID", region.NUTS_ID)
 ```
 which prints
 ```
-Loading LEVEL2 NUTS data from 2021 for IT at 60m spatial resolution
+Loading LEVEL2 NUTS data from 2016 for IT at 60m spatial resolution
 Point lies in NUTS2-Region Lazio with ID ITI4
 
-Loading LEVEL3 NUTS data from 2021 for IT at 60m spatial resolution
+Loading LEVEL3 NUTS data from 2016 for IT at 60m spatial resolution
 Point lies in NUTS3-Region Rieti with ID ITI42
 ```
+If you run these commands for the first time, the package first needs to download the necessary shapefiles. This can take a while but only needs to be done once.
 
 ## Find LAU-region corresponding to a specific location
-You can do the same now for LAU-regions which is a very fine grained tessalation of countries. 
+You can do the same now for LAU-regions which is a very fine grained tessalation of countries. Just type
+```python
+from pynuts import LauFinder
 
+finder = LauFinder(country_code="IT")
+region = finder.find(lat=42.61923574439346, lon=13.010336619663239)
+print("Point lies in LAU-Region", region.LAU_NAME, "with ID", region.LAU_ID)
+```
+which prints
+```
+Loading LAU data from 2019 for IT
+Loading additional NUTS data for hierarchical search.
+Loading LEVEL3 NUTS data from 2016 for IT at 1m spatial resolution
+Loading LEVEL3 NUTS data from 2016 for IT at 60m spatial resolution
+Loading correspondence table for IT
+Point lies in LAU-Region Monteleone di Spoleto with ID 054031
+```
+Note that the `LauFinder` loads multiple shape-files. That is because it performs a hierarchical search where it first looks up the NUTS-region of the location, then uses a correspondence table to find the LAU-regions within that NUTS-region and then performs the search for the LAU-region only on this subset. This yields a 6-8 time performance increase over simply searching only within the LAU data.
 
+# Useful links
+The package compiles data from the following sources:
+
+- The correspondence table which maps NUTS to LAU codes are obtained from https://ec.europa.eu/eurostat/web/nuts/local-administrative-units
+- The data distribution API which provides the shapefiles is accessed via https://gisco-services.ec.europa.eu/distribution/v2/
+ 
