@@ -3,6 +3,7 @@ from pathlib import Path
 import zipfile
 import geopandas
 import wget
+import pandas as pd
 
 # Create data directory in user home
 HOME = os.path.expanduser("~")
@@ -11,6 +12,10 @@ Path(DATA_DIRECTORY).mkdir(parents=True, exist_ok=True)
 
 # Path to the server that holds the LAU and NUTS shapefiles
 SERVER = "https://gisco-services.ec.europa.eu/distribution/v2/"
+
+# Path to the correspondence table on the server
+CORRESPONDENCE_TABLE = "https://ec.europa.eu/eurostat/documents/345175/501971/EU-27-LAU-2020-NUTS-2021-NUTS-2016.xlsx"
+
 
 def load_lau_table(country_code):
     """
@@ -100,5 +105,31 @@ def load_nuts_table(country_code, spatial_resolution, level):
     # Load data into pandas dataframe and filter for specified country
     df = geopandas.read_file(DATA_DIRECTORY+file_name[:-4]+"/"+shapefile)
     df = df[df["CNTR_CODE"] == country_code]
+
+    return df
+
+
+def load_correspondence_table(country_code):
+    """
+    Load the correspondence table that provides a mapping between NUTS and LAU.
+
+    Args:
+        country_code: The two digit country code (str)
+
+    Returns:
+        pandas.DataFrame containing the correspondence table for the specified
+        country.
+
+    Loads the data from the Eurostat server into pynuts' config folder and
+    stores it there for later use.
+    """
+    file_name = CORRESPONDENCE_TABLE.split("/")[-1]
+
+    # Download the data
+    if not os.path.exists(DATA_DIRECTORY+file_name):                              
+        wget.download(CORRESPONDENCE_TABLE, DATA_DIRECTORY+file_name)
+  
+    df = pd.read_excel(DATA_DIRECTORY+file_name, sheet_name=country_code, 
+                       dtype="object")
 
     return df
