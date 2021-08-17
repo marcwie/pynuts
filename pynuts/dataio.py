@@ -15,7 +15,7 @@ SERVER = "https://gisco-services.ec.europa.eu/distribution/v2/"
 
 # Path to the correspondence table on the server
 CORRESPONDENCE_TABLE = "https://ec.europa.eu/eurostat/documents/345175/"\
-        "501971/EU-27-LAU-2020-NUTS-2021-NUTS-2016.xlsx"
+        "501971/EU-28-LAU-2019-NUTS-2016.xlsx"
 
 
 def load_lau_table(country_code):
@@ -31,12 +31,12 @@ def load_lau_table(country_code):
     Loads the data from the Eurostat server into pynuts' config folder and
     stores it there for later use.
     """
-    print(f"Loading LAU data from 2020 for {country_code}")
+    print(f"Loading LAU data from 2019 for {country_code}")
 
     # TODO: Let users choose year and version in the future
     path = "lau/download/"
-    file_name = "ref-lau-2020-01m.shp.zip"
-    shapefile = "LAU_RG_01M_2020_4326.shp.zip"
+    file_name = "ref-lau-2019-01m.shp.zip"
+    shapefile = "LAU_RG_01M_2019_4326.shp.zip"
 
     # Download the data
     if not os.path.exists(DATA_DIRECTORY + file_name):
@@ -78,7 +78,7 @@ def load_nuts_table(country_code, spatial_resolution, level):
     - NUTS 3: small regions for specific diagnoses
     """
     print(
-        f"Loading LEVEL{level} NUTS data from 2021 for {country_code} at "
+        f"Loading LEVEL{level} NUTS data from 2016 for {country_code} at "
         f"{spatial_resolution}m spatial resolution"
     )
 
@@ -94,8 +94,8 @@ def load_nuts_table(country_code, spatial_resolution, level):
 
     # TODO: Let users choose year and version in the future
     path = "nuts/download/"
-    file_name = f"ref-nuts-2021-{spatial_resolution}m.shp.zip"
-    shapefile = f"NUTS_RG_{spatial_resolution}M_2021_4326_LEVL_{level}.shp.zip"
+    file_name = f"ref-nuts-2016-{spatial_resolution}m.shp.zip"
+    shapefile = f"NUTS_RG_{spatial_resolution}M_2016_4326_LEVL_{level}.shp.zip"
 
     # Download the data
     if not os.path.exists(DATA_DIRECTORY + file_name):
