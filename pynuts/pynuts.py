@@ -133,4 +133,9 @@ class LauFinder:
         lau_region_candidates = self._lau[self._lau.NUTS3_CODE == nuts_id]
         lau_region = _find(point, lau_region_candidates)
 
+        # If no LAU is found it might be that we picked the wrong NUTS region.
+        # So perform a normal direct search instead
+        if lau_region is None:
+            return _find(point, self._lau)
+
         return lau_region
